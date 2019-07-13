@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chuangyexia.dao.UserInfoMapper">
+    <insert id="userAdd" parameterType="com.chuangyexia.entity.UserInfo">
+        insert into user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test='username != null and username != ""'>
+                username,
+            </if>
+            <if test='password != null and password != ""'>
+                password,
+            </if>
+            <if test='userTel != null and userTel != ""'>
+                user_tel,
+            </if>
+            create_time,
+            del_flag,
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test='username != null and username != ""'>
+               #{username},
+            </if>
+            <if test='password != null and password != ""'>
+                #{password},
+            </if>
+            <if test='userTel != null and userTel != ""'>
+                #{userTel},
+            </if>
+            now(),
+            false,
+        </trim>
+    </insert>
+
+    <select id="getUserInfoByTel" resultType="com.chuangyexia.entity.UserInfoVo">
+        select
+          id as id,
+          username as username,
+          password as password,
+          user_tel as userTel
+        from user_info
+        where
+          user_tel = #{userTel}
+    </select>
+</mapper>
