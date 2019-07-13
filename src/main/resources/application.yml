@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+#数据库配置
+spring:
+  datasource:
+    username: root
+    password: 119
+    url: jdbc:mysql://192.168.0.113/chuangyexia
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    poolPreparedStatements: true
+
+#指定sql映射文件
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: com.chuangyexia.dao

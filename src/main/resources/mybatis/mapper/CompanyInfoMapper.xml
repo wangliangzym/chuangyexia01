@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chuangyexia.dao.CompanyInfoMapper">
+    <select id="getCompanyInfoList" resultType="com.chuangyexia.entity.CompanyInfoVo">
+        select
+            id as id,
+            company_name as companyName,
+            company_tip as companyTip,
+            company_type as companyType,
+            join_price as joinPrice,
+            application_count as applicationCount,
+            good_evaluate as goodEvaluate,
+            shop_count as shopCount,
+            big_pic_url as bigPicUrl,
+            small_pic_url as smallPicUrl,
+            company_profile as companyProfile,
+            create_time as createTime,
+            del_flag as delFlag
+        from company_info
+        <where>
+            <if test='companyName != null'>
+                company_name like #{companyName}
+            </if>
+        </where>
+    </select>
+</mapper>
