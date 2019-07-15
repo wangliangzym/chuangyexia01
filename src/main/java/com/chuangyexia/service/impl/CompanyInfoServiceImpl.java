@@ -19,4 +19,9 @@ public class CompanyInfoServiceImpl implements ICompanyInfoService {
     public List<CompanyInfoVo> getCompanyInfoList(CompanyInfo companyInfo) {
         return companyInfoMapper.getCompanyInfoList(companyInfo);
     }
+
+    @Override
+    public CompanyInfoVo getCompanyInfoDetailByParam(CompanyInfo companyInfo) {
+        return companyInfoMapper.getCompanyInfoDetailByParam(companyInfo);
+    }
 }

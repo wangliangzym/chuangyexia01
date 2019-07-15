@@ -1,6 +1,7 @@
 package com.chuangyexia.service.impl;
 
 import com.chuangyexia.dao.UserInfoMapper;
+import com.chuangyexia.entity.CompanyInfoVo;
 import com.chuangyexia.entity.UserInfo;
 import com.chuangyexia.entity.UserInfoVo;
 import com.chuangyexia.service.IUserInfoService;
@@ -8,6 +9,8 @@ import com.chuangyexia.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class UserInfoServiceImpl implements IUserInfoService {
@@ -28,4 +31,5 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public UserInfoVo getUserInfoByTel(String userTel) {
         return userInfoMapper.getUserInfoByTel(userTel);
     }
+
 }

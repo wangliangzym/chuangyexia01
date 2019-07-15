@@ -14,6 +14,8 @@ public class CompanyInfo {
 
     private String companyName;
 
+    private String companyTel;
+
     private String companyTip;
 
     private String companyType;
@@ -35,4 +37,14 @@ public class CompanyInfo {
     private Date createTime;
 
     private Boolean delFlag;
+
+    /**
+     * 加盟最大金额
+     */
+    private BigDecimal maxPrice;
+
+    /**
+     * 加盟最小金额
+     */
+    private BigDecimal minPrice;
 }

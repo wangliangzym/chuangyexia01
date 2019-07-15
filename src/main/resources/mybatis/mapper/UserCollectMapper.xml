@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chuangyexia.dao.UserCollectMapper">
+    <insert id="addUserCollect">
+        insert into user_collect (company_id,user_tel,del_flag)
+        values (#{companyId},#{userTel},false)
+    </insert>
+
+    <select id="selectCollectByTel" resultType="com.chuangyexia.entity.CompanyInfoVo">
+        select
+            ci.id as id,
+            ci.company_name as companyName,
+            ci.company_tip as companyTip,
+            ci.company_type as companyType,
+            ci.join_price as joinPrice,
+            ci.application_count as applicationCount,
+            ci.good_evaluate as goodEvaluate,
+            ci.shop_count as shopCount,
+            ci.big_pic_url as bigPicUrl,
+            ci.small_pic_url as smallPicUrl,
+            ci.company_profile as companyProfile
+        from user_info ui
+        left join company_info ci on ui.company_id = ci.id
+        where ui.user_tel = #{userTel}
+    </select>
+</mapper>

@@ -1,7 +1,11 @@
 package com.chuangyexia.service;
 
+import com.chuangyexia.entity.CompanyInfoVo;
 import com.chuangyexia.entity.UserInfo;
 import com.chuangyexia.entity.UserInfoVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface IUserInfoService {
 
@@ -17,4 +21,5 @@ public interface IUserInfoService {
      * @return
      */
     UserInfoVo getUserInfoByTel(String userTel);
+
 }

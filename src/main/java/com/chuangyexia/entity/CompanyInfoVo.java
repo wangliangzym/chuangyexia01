@@ -14,6 +14,8 @@ public class CompanyInfoVo {
 
     private String companyName;
 
+    private String companyTel;
+
     private String companyTip;
 
     private String companyType;

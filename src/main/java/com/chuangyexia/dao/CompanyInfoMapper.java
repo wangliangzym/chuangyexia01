@@ -14,4 +14,11 @@ public interface CompanyInfoMapper {
      * @return
      */
     List<CompanyInfoVo> getCompanyInfoList(CompanyInfo companyInfo);
+
+    /**
+     * 根据指定参数获取公司信息详情
+     * @param companyInfo
+     * @return
+     */
+    CompanyInfoVo getCompanyInfoDetailByParam(CompanyInfo companyInfo);
 }

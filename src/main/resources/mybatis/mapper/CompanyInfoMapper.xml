@@ -15,13 +15,53 @@
             shop_count as shopCount,
             big_pic_url as bigPicUrl,
             small_pic_url as smallPicUrl,
-            company_profile as companyProfile,
-            create_time as createTime,
-            del_flag as delFlag
+            company_profile as companyProfile
         from company_info
         <where>
             <if test='companyName != null'>
-                company_name like #{companyName}
+                and company_name like #{companyName}
+            </if>
+            <if test='companyType != null and companyType != ""'>
+                and company_type = #{companyType}
+            </if>
+            <if test='bigPicUrl != null and bigPicUrl != ""'>
+                and big_pic_url = #{bigPicUrl}
+            </if>
+            <if test='smallPicUrl != null and smallPicUrl != ""'>
+                and small_pic_url = #{smallPicUrl}
+            </if>
+            <if test='maxPrice != null and maxPrice != ""'>
+                and join_price <![CDATA[ <= ]]> maxPrice
+            </if>
+            <if test='minPrice != null and  minPrice != ""'>
+                and join_price <![CDATA[ >= ]]> minPrice
+            </if>
+        </where>
+    </select>
+    <select id="getCompanyInfoDetailByParam" resultType="com.chuangyexia.entity.CompanyInfoVo">
+        select
+            id as id,
+            company_name as companyName,
+            company_tel as companyTel,
+            company_tip as companyTip,
+            company_type as companyType,
+            join_price as joinPrice,
+            application_count as applicationCount,
+            good_evaluate as goodEvaluate,
+            shop_count as shopCount,
+            big_pic_url as bigPicUrl,
+            small_pic_url as smallPicUrl,
+            company_profile as companyProfile
+        from company_info
+        <where>
+            <if test='id != null and id != ""'>
+                and id = #{id}
+            </if>
+            <if test='bigPicUrl != null and bigPicUrl != ""'>
+                and big_pic_url = #{bigPicUrl}
+            </if>
+            <if test='smallPicUrl != null and smallPicUrl != ""'>
+                and small_pic_url = #{smallPicUrl}
             </if>
         </where>
     </select>
