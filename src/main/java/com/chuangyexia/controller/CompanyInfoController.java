@@ -10,10 +10,20 @@ import com.chuangyexia.service.IUserCollectService;
 import com.chuangyexia.service.IUserLeaveMessageService;
 import com.chuangyexia.utils.AjaxResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.List;
 
 @RestController
@@ -32,6 +42,8 @@ public class CompanyInfoController {
     @Autowired
     IUserCollectService userCollectService;
 
+    private final String BIG_PIC_DIR = "/images/bigPicture/";
+    private final String SMALL_PIC_DIR = "/images/smallPicture/";
     /**
      * 首页初始化
      * @return
@@ -98,6 +110,28 @@ public class CompanyInfoController {
             return AjaxResult.success("添加成功");
         }
         return AjaxResult.failed("添加失败");
+    }
+
+    /**
+     * 通过图片名称获取大图片在服务器地址
+     * @param request
+     * @return
+     */
+    public String getbigPic(HttpServletRequest request){
+        String bigPicUrl =
+                request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + BIG_PIC_DIR + "tupian.jpg";
+        return bigPicUrl;
+    }
+
+    /**
+     * 通过图片名称获取小图片在服务器地址
+     * @param request
+     * @return
+     */
+    public String getSmallPic(HttpServletRequest request){
+        String bigPicUrl =
+                request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + SMALL_PIC_DIR + "tupian.jpg";
+        return bigPicUrl;
     }
 
 
