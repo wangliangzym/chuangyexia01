@@ -10,20 +10,11 @@ import com.chuangyexia.service.IUserCollectService;
 import com.chuangyexia.service.IUserLeaveMessageService;
 import com.chuangyexia.utils.AjaxResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.imageio.ImageIO;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
 import java.util.List;
 
 @RestController
@@ -49,7 +40,7 @@ public class CompanyInfoController {
      * @return
      */
     @RequestMapping("/homePageInit")
-    public AjaxResult homePageInit(){
+    public AjaxResult homePageInit(HttpServletRequest request){
         //todo 1.获取轮播图
         //2.获取所有分类
         List<CompanyTypeMasterVo> companyTypes = companyTypeMasterService.getAllType();
@@ -65,8 +56,12 @@ public class CompanyInfoController {
      * @return
      */
     @RequestMapping("/getCompanyInfoList")
-    public AjaxResult getCompanyInfoList(CompanyInfo companyInfo){
+    public AjaxResult getCompanyInfoList(CompanyInfo companyInfo,HttpServletRequest request){
         List<CompanyInfoVo> companyInfoList = companyInfoService.getCompanyInfoList(companyInfo);
+        //根据图图片名称获取公司相应小图片
+        companyInfoList.stream().forEach(company ->{
+            company.setSmallPicUrl(getSmallPic(company.getSmallPicUrl(),request));
+        });
         return AjaxResult.success(companyInfoList);
     }
 
@@ -76,8 +71,10 @@ public class CompanyInfoController {
      * @return
      */
     @RequestMapping("/getCompanyInfoDetail")
-    public AjaxResult getCompanyInfoDetailByParam(CompanyInfo companyInfo){
+    public AjaxResult getCompanyInfoDetailByParam(CompanyInfo companyInfo,HttpServletRequest request){
         CompanyInfoVo companyInfoDetail = companyInfoService.getCompanyInfoDetailByParam(companyInfo);
+        //获取公司大图片
+        companyInfoDetail.setBigPicUrl(getBigPic(companyInfoDetail.getBigPicUrl(),request));
         //todo 看了又看
         return AjaxResult.success(companyInfoDetail);
     }
@@ -117,9 +114,9 @@ public class CompanyInfoController {
      * @param request
      * @return
      */
-    public String getbigPic(HttpServletRequest request){
+    public String getBigPic(String picName,HttpServletRequest request){
         String bigPicUrl =
-                request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + BIG_PIC_DIR + "tupian.jpg";
+                request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + BIG_PIC_DIR + picName;
         return bigPicUrl;
     }
 
@@ -128,10 +125,8 @@ public class CompanyInfoController {
      * @param request
      * @return
      */
-    public String getSmallPic(HttpServletRequest request){
-        String bigPicUrl =
-                request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + SMALL_PIC_DIR + "tupian.jpg";
-        return bigPicUrl;
+    public String getSmallPic(String picName,HttpServletRequest request){
+        return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + SMALL_PIC_DIR + picName;
     }
 
 
