@@ -9,6 +9,8 @@
             company_name as companyName,
             company_tip as companyTip,
             company_type as companyType,
+            label1 as label1,
+            label2 as label2,
             join_price as joinPrice,
             application_count as applicationCount,
             good_evaluate as goodEvaluate,
@@ -38,7 +40,7 @@
             </if>
         </where>
     </select>
-    <select id="getCompanyInfoDetailByParam" resultType="com.chuangyexia.entity.CompanyInfoVo">
+    <select id="getCompanyInfoDetailById" resultType="com.chuangyexia.entity.CompanyInfoVo">
         select
             id as id,
             company_name as companyName,
@@ -46,6 +48,8 @@
             company_tip as companyTip,
             company_type as companyType,
             join_price as joinPrice,
+            label1 as label1,
+            label2 as label2,
             application_count as applicationCount,
             good_evaluate as goodEvaluate,
             shop_count as shopCount,
@@ -53,16 +57,46 @@
             small_pic_url as smallPicUrl,
             company_profile as companyProfile
         from company_info
-        <where>
-            <if test='id != null and id != ""'>
-                and id = #{id}
-            </if>
-            <if test='bigPicUrl != null and bigPicUrl != ""'>
-                and big_pic_url = #{bigPicUrl}
-            </if>
-            <if test='smallPicUrl != null and smallPicUrl != ""'>
-                and small_pic_url = #{smallPicUrl}
-            </if>
-        </where>
+        where id = #{id}
     </select>
+    
+    <select id="getLookAgainList" parameterType="string" resultType="com.chuangyexia.entity.CompanyInfoVo">
+        select
+            id as id,
+            company_name as companyName,
+            company_tip as companyTip,
+            company_type as companyType,
+            label1 as label1,
+            label2 as label2,
+            join_price as joinPrice,
+            application_count as applicationCount,
+            small_pic_url as smallPicUrl
+        from company_info
+        where
+            company_type = #{companyType}
+            and del_flag = false
+			order by good_evaluate desc
+            limit 3
+    </select>
+
+    <select id="getCarouselPic" resultType="com.chuangyexia.entity.CompanyInfoVo">
+       SELECT
+          id as id,
+          big_pic_url as bigPicUrl
+       from company_info
+       where del_flag = false
+       order by shop_count desc
+       limit 3
+    </select>
+
+    <select id="getBusinessTop" resultType="com.chuangyexia.entity.CompanyInfoVo">
+       SELECT
+          id as id,
+          big_pic_url as bigPicUrl
+       from company_info
+       where del_flag = false
+       order by application_count desc
+       limit 2
+    </select>
+
 </mapper>

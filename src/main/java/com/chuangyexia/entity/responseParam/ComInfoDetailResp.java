@@ -1,14 +1,16 @@
-package com.chuangyexia.entity;
+package com.chuangyexia.entity.responseParam;
 
+import com.chuangyexia.entity.CompanyInfoVo;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
-public class CompanyInfo {
+public class ComInfoDetailResp implements Serializable {
 
     private Long id;
 
@@ -20,6 +22,10 @@ public class CompanyInfo {
 
     private String companyType;
 
+    private String label1;
+
+    private String label2;
+    
     private BigDecimal joinPrice;
 
     private Integer applicationCount;
@@ -34,27 +40,5 @@ public class CompanyInfo {
 
     private String companyProfile;
 
-    private Date createTime;
-
-    private Boolean delFlag;
-
-    /**
-     * 加盟最大金额
-     */
-    private BigDecimal maxPrice;
-
-    /**
-     * 加盟最小金额
-     */
-    private BigDecimal minPrice;
-
-    /**
-     * 起始页
-     */
-    private Integer pageIndex;
-
-    /**
-     * 页面大小
-     */
-    private Integer pageSize;
+    List<CompanyInfoVo> companyInfoVos;
 }

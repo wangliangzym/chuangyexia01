@@ -4,18 +4,27 @@ import com.chuangyexia.entity.CompanyInfo;
 import com.chuangyexia.entity.CompanyInfoVo;
 import com.chuangyexia.entity.CompanyTypeMasterVo;
 import com.chuangyexia.entity.UserLeaveMessage;
+import com.chuangyexia.entity.responseParam.ComInfoDetailResp;
+import com.chuangyexia.entity.responseParam.MoneyAreaResp;
+import com.chuangyexia.enums.MoneyDomainEnum;
 import com.chuangyexia.service.ICompanyInfoService;
 import com.chuangyexia.service.ICompanyTypeMasterService;
 import com.chuangyexia.service.IUserCollectService;
 import com.chuangyexia.service.IUserLeaveMessageService;
 import com.chuangyexia.utils.AjaxResult;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("companyInfo")
@@ -41,42 +50,72 @@ public class CompanyInfoController {
      */
     @RequestMapping("/homePageInit")
     public AjaxResult homePageInit(HttpServletRequest request){
-        //todo 1.获取轮播图
+        //1.获取轮播图(店铺数量排名前三)
+        List<CompanyInfoVo> carouselPics = companyInfoService.getCarouselPic();
+        //同步大图
+        carouselPics.stream().forEach(carouselPic ->{
+            carouselPic.setBigPicUrl(getBigPic(carouselPic.getBigPicUrl(),request));
+        });
         //2.获取所有分类
         List<CompanyTypeMasterVo> companyTypes = companyTypeMasterService.getAllType();
-        //3.创业头条
+        //3.创业头条(申请数量排名前二)
+        List<CompanyInfoVo> businessTops = companyInfoService.getBusinessTop();
+        businessTops.stream().forEach(businessTop -> {
+            businessTop.setBigPicUrl(getBigPic(businessTop.getBigPicUrl(),request));
+        });
         //4.猜你喜欢
+        List<CompanyInfoVo> lookAgainList = companyInfoService.getLookAgainList("2");
+        lookAgainList.stream().forEach(lookAgain ->{
+            lookAgain.setSmallPicUrl(getSmallPic(lookAgain.getSmallPicUrl(),request));
+        });
 
-        return AjaxResult.success();
+        Map<String,Object> results = new HashMap<>();
+        results.put("carouselPicList",carouselPics);
+        results.put("companyTypeList",companyTypes);
+        results.put("businessTopList",businessTops);
+        results.put("lookAgainList",lookAgainList);
+
+        return AjaxResult.success(results);
     }
 
     /**
-     * 根据相关参数获取公司列表
+     * 根据相关参数获取公司列表(分类列表)
      * @param companyInfo
      * @return
      */
     @RequestMapping("/getCompanyInfoList")
     public AjaxResult getCompanyInfoList(CompanyInfo companyInfo,HttpServletRequest request){
+        PageHelper.startPage(companyInfo.getPageIndex(),companyInfo.getPageSize());
         List<CompanyInfoVo> companyInfoList = companyInfoService.getCompanyInfoList(companyInfo);
         //根据图图片名称获取公司相应小图片
         companyInfoList.stream().forEach(company ->{
             company.setSmallPicUrl(getSmallPic(company.getSmallPicUrl(),request));
         });
-        return AjaxResult.success(companyInfoList);
+        PageInfo<CompanyInfoVo> pageInfo = new PageInfo<>(companyInfoList);
+        return AjaxResult.success(pageInfo.getList());
     }
 
     /**
      * 获取公司详情
-     * @param companyInfo
+     * @param id
      * @return
      */
     @RequestMapping("/getCompanyInfoDetail")
-    public AjaxResult getCompanyInfoDetailByParam(CompanyInfo companyInfo,HttpServletRequest request){
-        CompanyInfoVo companyInfoDetail = companyInfoService.getCompanyInfoDetailByParam(companyInfo);
+    public AjaxResult getCompanyInfoDetailByParam(@RequestParam(value = "id") Long id,
+                                                  HttpServletRequest request){
+        CompanyInfoVo companyInfoDetail = companyInfoService.getCompanyInfoDetailById(id);
         //获取公司大图片
         companyInfoDetail.setBigPicUrl(getBigPic(companyInfoDetail.getBigPicUrl(),request));
-        //todo 看了又看
-        return AjaxResult.success(companyInfoDetail);
+        //看了又看，同类型的取三个
+        List<CompanyInfoVo> lookAgainList = companyInfoService.getLookAgainList(companyInfoDetail.getCompanyType());
+        //同步小图
+        lookAgainList.stream().forEach(CompanyInfoVo->{
+            CompanyInfoVo.setSmallPicUrl(getSmallPic(CompanyInfoVo.getSmallPicUrl(),request));
+        });
+        ComInfoDetailResp results = new ComInfoDetailResp();
+        BeanUtils.copyProperties(companyInfoDetail,results);
+        results.setCompanyInfoVos(lookAgainList);
+        return AjaxResult.success(results);
     }
 
     /**
@@ -107,6 +146,32 @@ public class CompanyInfoController {
             return AjaxResult.success("添加成功");
         }
         return AjaxResult.failed("添加失败");
+    }
+
+    /**
+     * 获取所有公司分类列表
+     * @return
+     */
+    @RequestMapping("/getAllCompanyType")
+    public AjaxResult getAllCompanyType(){
+        List<CompanyTypeMasterVo> companyTypes = companyTypeMasterService.getAllType();
+        return AjaxResult.success(companyTypes);
+    }
+
+    /**
+     * 获取价格区间列表
+     * @return
+     */
+    @RequestMapping("/getAllMoneyArea")
+    public AjaxResult getAllMoneyArea(){
+        List<MoneyAreaResp> results = new ArrayList<>();
+        for (MoneyDomainEnum value : MoneyDomainEnum.values()) {
+            MoneyAreaResp moneyAreaResp = new MoneyAreaResp();
+            moneyAreaResp.setCode(value.getCode());
+            moneyAreaResp.setName(value.getArea());
+            results.add(moneyAreaResp);
+        }
+        return AjaxResult.success(results);
     }
 
     /**

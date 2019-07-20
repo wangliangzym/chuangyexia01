@@ -15,9 +15,27 @@ public interface ICompanyInfoService {
     List<CompanyInfoVo> getCompanyInfoList(CompanyInfo companyInfo);
 
     /**
-     * 根据指定参数获取公司信息详情
-     * @param companyInfo
+     * @param id
      * @return
      */
-    CompanyInfoVo getCompanyInfoDetailByParam(CompanyInfo companyInfo);
+    CompanyInfoVo getCompanyInfoDetailById(Long id);
+
+    /**
+     * 看了又看列表
+     * @param companyType
+     * @return
+     */
+    List<CompanyInfoVo> getLookAgainList(String companyType);
+
+    /**
+     * 获取首页轮播图
+     * @return
+     */
+    List<CompanyInfoVo> getCarouselPic();
+
+    /**
+     * 创业头条
+     * @return
+     */
+    List<CompanyInfoVo> getBusinessTop();
 }

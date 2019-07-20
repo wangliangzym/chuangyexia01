@@ -20,6 +20,10 @@ public class CompanyInfoVo {
 
     private String companyType;
 
+    private String label1;
+
+    private String label2;
+
     private BigDecimal joinPrice;
 
     private Integer applicationCount;
@@ -33,9 +37,4 @@ public class CompanyInfoVo {
     private String smallPicUrl;
 
     private String companyProfile;
-
-    private Date createTime;
-
-    private Boolean delFlag;
-
 }
