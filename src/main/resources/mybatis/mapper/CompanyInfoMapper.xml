@@ -32,12 +32,23 @@
             <if test='smallPicUrl != null and smallPicUrl != ""'>
                 and small_pic_url = #{smallPicUrl}
             </if>
-            <if test='maxPrice != null and maxPrice != ""'>
-                and join_price <![CDATA[ <= ]]> maxPrice
-            </if>
-            <if test='minPrice != null and  minPrice != ""'>
-                and join_price <![CDATA[ >= ]]> minPrice
-            </if>
+            <choose>
+                <when test='priceType == 1'>
+                  and join_price between 0 and 2000
+                </when>
+                <when test='priceType == 2'>
+                    and join_price between 2000 and 4000
+                </when>
+                <when test='priceType == 3'>
+                    and join_price between 4000 and 6000
+                </when>
+                <when test='priceType == 4'>
+                    and join_price between 6000 and 8000
+                </when>
+                <when test='priceType == 5'>
+                    and join_price between 8000 and 10000
+                </when>
+            </choose>
         </where>
     </select>
     <select id="getCompanyInfoDetailById" resultType="com.chuangyexia.entity.CompanyInfoVo">

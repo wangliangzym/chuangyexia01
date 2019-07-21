@@ -143,9 +143,9 @@ public class CompanyInfoController {
                                      @RequestParam("userTel") String userTel){
         Integer result = userCollectService.addUserCollect(companyId, userTel);
         if(result > 0){
-            return AjaxResult.success("添加成功");
+            return AjaxResult.success("收藏成功");
         }
-        return AjaxResult.failed("添加失败");
+        return AjaxResult.failed("收藏失败");
     }
 
     /**

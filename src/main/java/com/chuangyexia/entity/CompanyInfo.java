@@ -38,16 +38,7 @@ public class CompanyInfo {
 
     private Boolean delFlag;
 
-    /**
-     * 加盟最大金额
-     */
-    private BigDecimal maxPrice;
-
-    /**
-     * 加盟最小金额
-     */
-    private BigDecimal minPrice;
-
+    private String priceType;
     /**
      * 起始页
      */
